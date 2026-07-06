@@ -77,9 +77,13 @@ ingress:
 %{ else ~}
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
 %{ endif ~}
-%{ if grafana_domain != "" ~}
+
   hosts:
+%{ if grafana_domain != "" ~}
     - ${grafana_domain}
+%{ else ~}
+    - ""
 %{ endif ~}
+
   path: /
   pathType: Prefix
