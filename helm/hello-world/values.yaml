@@ -1,7 +1,7 @@
 replicaCount: 2
 
 image:
-  repository: ghcr.io/sid12111/hello-world
+  repository: ghcr.io/<your-username>/hello-world
   tag: latest
   pullPolicy: IfNotPresent
 
