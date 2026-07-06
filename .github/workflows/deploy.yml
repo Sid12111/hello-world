@@ -90,4 +90,8 @@ jobs:
         run: |
           kubectl rollout status deployment/hello-world \
             -n hello-world \
+<<<<<<< HEAD
             --timeout=120s
+=======
+            --timeout=120s
+>>>>>>> e3484ca (terraform)

@@ -1,0 +1,11 @@
+# Copy this to terraform.tfvars and fill in your own values.
+# Both are optional — leave them empty (or omit this file entirely) to expose
+# Grafana over plain HTTP at the ALB's auto-generated DNS name instead.
+
+# ACM certificate ARN, in the same region as aws_region, to enable HTTPS on
+# Grafana's ALB (and the app's, if you pass ingress.certificateArn to Helm too).
+acm_certificate_arn = ""
+
+# Custom hostname for Grafana's Ingress, e.g. "grafana.example.com".
+# Requires a matching Route 53 (or other DNS) record pointing at the ALB.
+grafana_domain = ""

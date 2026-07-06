@@ -1,0 +1,71 @@
+{
+  "title": "Hello World Service",
+  "uid": "hello-world-app",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-1h", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Request Rate (req/s)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(rate(hello_world_http_requests_total[5m])) by (path, status)",
+          "legendFormat": "{{path}} - {{status}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "P95 Request Latency (s)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(hello_world_http_request_duration_seconds_bucket[5m])) by (le, path))",
+          "legendFormat": "{{path}} p95"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Pod CPU Usage (hello-world namespace)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"hello-world\"}[5m])) by (pod)",
+          "legendFormat": "{{pod}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Pod Memory Usage (hello-world namespace)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum(container_memory_working_set_bytes{namespace=\"hello-world\"}) by (pod)",
+          "legendFormat": "{{pod}}"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Ready Pods vs Desired",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "expr": "kube_deployment_status_replicas_available{namespace=\"hello-world\", deployment=\"hello-world\"}",
+          "legendFormat": "Available"
+        }
+      ]
+    }
+  ]
+}

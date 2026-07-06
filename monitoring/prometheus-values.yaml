@@ -1,0 +1,46 @@
+# Values for the prometheus-community/kube-prometheus-stack chart.
+# This installs Prometheus, Alertmanager, Grafana, node-exporter, and
+# kube-state-metrics, pre-wired to scrape both cluster and application metrics.
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    # Discover ServiceMonitors from ANY namespace (so hello-world's
+    # ServiceMonitor in the "hello-world" namespace gets picked up
+    # even though Prometheus itself lives in "monitoring").
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+
+# Grafana is intentionally disabled here and installed instead as its own
+# standalone Helm release (see terraform/main.tf + monitoring/grafana-values.yaml.tpl).
+# That keeps Grafana's chart version/upgrades independent of kube-prometheus-stack's.
+grafana:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: true
+
+nodeExporter:
+  enabled: true
+
+defaultRules:
+  create: true
+  rules:
+    kubernetesApps: true
+    kubernetesResources: true
+    node: true
