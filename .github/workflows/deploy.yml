@@ -10,8 +10,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  IMAGE_NAME: ghcr.io/sid12111/hello-world
-
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hello-world
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
