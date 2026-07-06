@@ -80,14 +80,12 @@ jobs:
           helm upgrade --install hello-world ./helm/hello-world \
             --namespace hello-world \
             --create-namespace \
-            --set image.repository=${{ env.IMAGE_NAME }} \
+            -f ./helm/hello-world/values.yaml \
             --set image.tag=${{ needs.build-and-push.outputs.image_tag }} \
-            --set ingress.host=${{ secrets.APP_DOMAIN }} \
-            --set ingress.certificateArn=${{ secrets.ACM_CERT_ARN }} \
             --wait --timeout 5m
 
       - name: Verify rollout
         run: |
           kubectl rollout status deployment/hello-world \
             -n hello-world \
-
+            --timeout=120s
