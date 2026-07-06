@@ -65,7 +65,7 @@ monitoring/          # Prometheus/Grafana values + a sample Grafana dashboard JS
 - AWS account with credentials configured (`aws configure`) and permission to
   create VPCs, EKS clusters, IAM roles, and EC2 instances
 - Terraform >= 1.5
-- kubectl >= 1.29
+- kubectl >= 1.33
 - Helm >= 3.14
 - Docker (to build the app image)
 - Go >= 1.22 (only needed if you want to run/build the app locally outside Docker)
@@ -85,7 +85,7 @@ This creates:
   subnets are tagged `kubernetes.io/role/elb=1` so the ALB controller can
   place load balancers in them
 - An EKS cluster (`hello-world-eks`, Kubernetes 1.29) with a managed node
-  group (2–4 × `t3.medium` nodes)
+  group (2–4 × `your-instance type` nodes)
 - An IAM OIDC provider for the cluster + an IRSA role/policy for the AWS
   Load Balancer Controller, and the controller itself (installed into
   `kube-system` via Helm) — this is what turns Kubernetes `Ingress` objects
@@ -291,14 +291,3 @@ it's managed as a Terraform resource.)
   default) with no rate limiting — fine for a demo, but a public-facing
   production deployment would pair this with the WAF above and/or
   `alb.ingress.kubernetes.io/inbound-cidrs` restrictions.
-- **No automated tests** for the Go service (a single-endpoint Hello World
-  app didn't seem to warrant a test suite, but `go test` scaffolding would
-  be trivial to add and would run as a job in the GitHub Actions workflow
-  before the build step).
-- **`go.sum` is not included** — run `go mod tidy` inside `app/` once after
-  cloning to generate it (omitted here since it's a generated/machine
-  file, but Docker's `go mod download` step expects it to exist before
-  building; run it once so the build step has a lockfile to work from).
-- The CI/CD pipeline assumes the EKS cluster from step 1 already exists
-  (it deploys to it, it doesn't provision it) — a fuller pipeline would
-  add a separate `terraform apply` job gated behind manual approval.
