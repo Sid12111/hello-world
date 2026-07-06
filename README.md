@@ -115,11 +115,10 @@ docker push ghcr.io/<your-username>/hello-world:latest
 ## 3. Deploy the app with Helm
 
 ```bash
-helm upgrade --install hello-world ./helm/hello-world \
+helm install hello-world ./helm/hello-world \
   --namespace hello-world \
   --create-namespace \
-  --set image.repository=ghcr.io/<your-username>/hello-world \
-  --set image.tag=latest
+  -f ./helm/hello-world/values.yaml
 ```
 
 Verify it's up and serving:
